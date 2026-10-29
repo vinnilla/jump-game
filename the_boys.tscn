@@ -1,0 +1,38 @@
+[gd_scene format=3 uid="uid://cvuq0aw4cgcq5"]
+
+[ext_resource type="Texture2D" uid="uid://c46vvxhflo4db" path="res://art/the-boys-500px.png" id="1_1l1yu"]
+[ext_resource type="Script" uid="uid://3b46f5nsrxd0" path="res://the_boys.gd" id="1_t6i8k"]
+[ext_resource type="Texture2D" uid="uid://u0c48dg0nbjr" path="res://art/the-boys-500px-gray.png" id="3_i7rkk"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_m7ri8"]
+size = Vector2(250, 266)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_m7ri8"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_1l1yu")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_i7rkk")
+}],
+"loop": 1,
+"name": &"hit",
+"speed": 5.0
+}]
+
+[node name="TheBoys" type="CharacterBody2D" unique_id=1458941267]
+position = Vector2(152, 505)
+collision_layer = 2
+collision_mask = 5
+script = ExtResource("1_t6i8k")
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1734288576]
+position = Vector2(0, 1)
+shape = SubResource("RectangleShape2D_m7ri8")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=2133767207]
+scale = Vector2(0.5, 0.5)
+sprite_frames = SubResource("SpriteFrames_m7ri8")
+animation = &"hit"

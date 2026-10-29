@@ -1,0 +1,38 @@
+[gd_scene format=3 uid="uid://bskowdyn8q6f6"]
+
+[ext_resource type="PackedScene" uid="uid://cvuq0aw4cgcq5" path="res://the_boys.tscn" id="1_0xm2m"]
+[ext_resource type="Script" uid="uid://dyn68n2ekei8s" path="res://main.gd" id="1_h2yge"]
+[ext_resource type="PackedScene" uid="uid://d1ra6nkydiond" path="res://floor.tscn" id="2_h2yge"]
+[ext_resource type="PackedScene" uid="uid://cs042o5m1cjer" path="res://obstacle.tscn" id="2_lquwl"]
+[ext_resource type="PackedScene" uid="uid://duwn7iggkrc1p" path="res://hud.tscn" id="4_1bvp3"]
+
+[node name="Main" type="Node" unique_id=414465791]
+script = ExtResource("1_h2yge")
+obstacle_scene = ExtResource("2_lquwl")
+
+[node name="TheBoys" parent="." unique_id=1458941267 instance=ExtResource("1_0xm2m")]
+
+[node name="ObstacleTimer" type="Timer" parent="." unique_id=1760744197]
+wait_time = 2.0
+
+[node name="ScoreTimer" type="Timer" parent="." unique_id=156919338]
+
+[node name="StartTimer" type="Timer" parent="." unique_id=817925780]
+wait_time = 2.0
+one_shot = true
+
+[node name="StartPosition" type="Marker2D" parent="." unique_id=1476601710]
+position = Vector2(200, 600)
+
+[node name="ObstacleSpawn" type="Marker2D" parent="." unique_id=60334232]
+position = Vector2(1150, 600)
+
+[node name="Floor" parent="." unique_id=1969967619 instance=ExtResource("2_h2yge")]
+
+[node name="HUD" parent="." unique_id=451948427 instance=ExtResource("4_1bvp3")]
+
+[connection signal="hit" from="TheBoys" to="." method="_on_the_boys_hit"]
+[connection signal="timeout" from="ObstacleTimer" to="." method="_on_obstacle_timer_timeout"]
+[connection signal="timeout" from="ScoreTimer" to="." method="_on_score_timer_timeout"]
+[connection signal="timeout" from="StartTimer" to="." method="_on_start_timer_timeout"]
+[connection signal="start_game" from="HUD" to="." method="new_game"]
