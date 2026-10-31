@@ -29,18 +29,19 @@ func _physics_process(delta) -> void:
 	get_input()
 	move_and_slide()
 	var collision_count = get_slide_collision_count()
-	for i in collision_count:
-		var collision = get_slide_collision(i)
-		if collision:
-			var collider = collision.get_collider()
-			if collider.name != "Floor":
-				print("I collided with ", collision.get_collider().name)
-				collider.hide()
-				collider.queue_free()
-				
-				on_hit()
-				await get_tree().create_timer(1.0).timeout
-				reset()
+	if collision_count > 0:
+		for i in collision_count:
+			var collision = get_slide_collision(i)
+			if collision:
+				var collider = collision.get_collider()
+				if collider.name != "Floor":
+					print("I collided with ", collision.get_collider().name)
+					collider.hide()
+					collider.queue_free()
+					
+					on_hit()
+					await get_tree().create_timer(1.0).timeout
+					reset()
 
 # what happens when character collides with obstacle
 func on_hit():

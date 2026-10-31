@@ -64,6 +64,7 @@ func _on_obstacle_timer_timeout() -> void:
 	
 	# set the start position
 	obstacle.position = $ObstacleSpawn.position
+	obstacle.position.y -= randi() % 201 # add variance to spawn
 	obstacle.visible = true
 	
 	# spawn the obstacle
