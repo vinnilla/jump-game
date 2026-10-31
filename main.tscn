@@ -36,7 +36,7 @@ one_shot = true
 [node name="ScoreTimer" type="Timer" parent="." unique_id=156919338]
 
 [node name="ObstacleTimer" type="Timer" parent="." unique_id=1760744197]
-wait_time = 2.0
+wait_time = 3.0
 
 [node name="CloudTimer" type="Timer" parent="." unique_id=374598602]
 wait_time = 5.0
