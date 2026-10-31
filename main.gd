@@ -1,6 +1,7 @@
 extends Node
 
 @export var obstacle_scene: PackedScene
+@export var cloud_scene: PackedScene
 var score
 var health
 
@@ -52,6 +53,7 @@ func _on_score_timer_timeout() -> void:
 func _on_start_timer_timeout() -> void:
 	$ObstacleTimer.start()
 	$ScoreTimer.start()
+	$CloudTimer.start()
 
 
 func _on_the_boys_hit() -> void:
@@ -59,3 +61,19 @@ func _on_the_boys_hit() -> void:
 	$HUD.update_health(health)
 	if health <= 0:
 		game_over()
+
+
+func _on_cloud_timer_timeout() -> void:
+	# delay an extra 0 - 3 seconds on top of the timer's 5 seconds
+	await get_tree().create_timer(randi() % 4).timeout
+	
+	# create a new instance of cloud
+	var cloud = cloud_scene.instantiate()
+	
+	# set the start position
+	cloud.position = $CloudSpawn.position
+	cloud.position.y += randi() % 150
+	cloud.visible = true
+	
+	# spawn the cloud
+	add_child(cloud)
