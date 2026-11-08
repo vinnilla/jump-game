@@ -1,0 +1,10 @@
+[gd_scene format=3 uid="uid://b31jeocijhkbq"]
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_sxki6"]
+
+[node name="RightWall" type="StaticBody2D" unique_id=829734762]
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=568050165]
+rotation = -1.5707964
+shape = SubResource("WorldBoundaryShape2D_sxki6")

@@ -6,6 +6,8 @@
 [ext_resource type="PackedScene" uid="uid://cs042o5m1cjer" path="res://obstacle.tscn" id="2_lquwl"]
 [ext_resource type="PackedScene" uid="uid://cnu63ll3mp4dw" path="res://cloud.tscn" id="3_7mycd"]
 [ext_resource type="PackedScene" uid="uid://duwn7iggkrc1p" path="res://hud.tscn" id="4_1bvp3"]
+[ext_resource type="PackedScene" uid="uid://dyyjuxnbh18y1" path="res://left_wall.tscn" id="5_272bh"]
+[ext_resource type="PackedScene" uid="uid://b31jeocijhkbq" path="res://right_wall.tscn" id="6_5vw27"]
 
 [node name="Main" type="Node" unique_id=414465791]
 script = ExtResource("1_h2yge")
@@ -42,6 +44,11 @@ wait_time = 3.0
 wait_time = 5.0
 
 [node name="Floor" parent="." unique_id=1969967619 instance=ExtResource("2_h2yge")]
+
+[node name="LeftWall" parent="." unique_id=32277815 instance=ExtResource("5_272bh")]
+
+[node name="RightWall" parent="." unique_id=829734762 instance=ExtResource("6_5vw27")]
+position = Vector2(1150, 0)
 
 [node name="TheBoys" parent="." unique_id=1458941267 instance=ExtResource("1_0xm2m")]
 

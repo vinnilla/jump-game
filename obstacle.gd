@@ -1,6 +1,6 @@
 extends RigidBody2D
 
-var DEBUG = true
+var DEBUG = false
 # generate variable speed (400 - 1000)
 var speed_low = 400 # about the slowest an obstacle can move before char needs
 					# to be able to double jump
@@ -9,7 +9,7 @@ var speed = randi() % 601 + 400
 
 func _ready() -> void:
 	if DEBUG:
-		#print(speed)
+		print(speed)
 		print(position.y)
 
 # move obstacle every frame
