@@ -7,6 +7,7 @@ var MOVE_SPEED = 200
 var GRAVITY = 1000
 
 var double_jump_enabled = false
+var is_invincible = false
 
 func _ready() -> void:
 	hide()
@@ -58,13 +59,13 @@ func _physics_process(delta) -> void:
 					print("x movement intercepted: ", collider.name)
 					velocity.x = 0
 				# check for damaging collisions
-				elif collider.name != "Floor":
+				elif collider.name != "Floor" and not is_invincible:
 					print("I collided with ", collision.get_collider().name)
 					collider.hide()
 					collider.queue_free()
 					
 					on_hit()
-					await get_tree().create_timer(1.0).timeout
+					await get_tree().create_timer(5).timeout
 					reset()
 
 # what happens when character collides with obstacle
@@ -75,11 +76,18 @@ func on_hit():
 	
 	# emit hit signal
 	hit.emit()
-	
-	# TODO: add invincibility frames - disabling collision will make the char 
-	# fall through the floor
+	 
+	# enable invincibility
+	is_invincible = true
+	# disable collision with obstacles
+	set_collision_mask_value(3, false)
 
 # what happens when the character can be hit again
 func reset() -> void:
 	# stop hit animation
 	$AnimatedSprite2D.stop()
+	
+	# disable invincibility
+	is_invincible = false
+	# enable collision with obstacles
+	set_collision_mask_value(3, true)
