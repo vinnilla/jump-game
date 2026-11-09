@@ -1,0 +1,10 @@
+[gd_scene format=3 uid="uid://cjcrxkp1dv2ks"]
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_sxki6"]
+
+[node name="Ceiling" type="StaticBody2D" unique_id=1958310531]
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1068603292]
+rotation = 3.1415927
+shape = SubResource("WorldBoundaryShape2D_sxki6")

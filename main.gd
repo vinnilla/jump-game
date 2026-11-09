@@ -1,7 +1,8 @@
 extends Node
 
-@export var obstacle_scene: PackedScene
 @export var cloud_scene: PackedScene
+@export var obstacle_scene: PackedScene
+@export var powerup_scene: PackedScene
 
 var score
 var health
@@ -27,6 +28,8 @@ func new_game() -> void:
 func game_over() -> void:
 	$ScoreTimer.stop()
 	$ObstacleTimer.stop()
+	$CloudTimer.stop()
+	$ObstacleTimer.stop()
 	$HUD.show_game_over()
 	$TheBoys.hide()
 
@@ -37,9 +40,10 @@ func _on_score_timer_timeout() -> void:
 
 # what happens after START button delay ends
 func _on_start_timer_timeout() -> void:
-	$ObstacleTimer.start()
 	$ScoreTimer.start()
+	$ObstacleTimer.start()
 	$CloudTimer.start()
+	$PowerupTimer.start()
 
 # spawn a new cloud
 func _on_cloud_timer_timeout() -> void:
@@ -70,7 +74,19 @@ func _on_obstacle_timer_timeout() -> void:
 	# spawn the obstacle
 	add_child(obstacle)
 
-# when character collides to obstacle
+# spawn new powerup
+func _on_powerup_timer_timeout() -> void:
+	# create a new instance of powerup
+	var powerup = powerup_scene.instantiate()
+	
+	# set the start position
+	powerup.position = $PowerupSpawn.position
+	powerup.visible = true
+	
+	# spawn the powerup
+	add_child(powerup)
+
+# when character collides with obstacle
 func _on_the_boys_hit() -> void:
 	health -= 20
 	$HUD.update_health(health)

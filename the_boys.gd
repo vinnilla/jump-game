@@ -5,9 +5,11 @@ signal hit
 var JUMP_SPEED = -600
 var MOVE_SPEED = 200
 var GRAVITY = 1000
+var FLY_SPEED = 500
 
 var double_jump_enabled = false
 var is_invincible = false
+var flight_mode = false
 
 func _ready() -> void:
 	hide()
@@ -24,28 +26,50 @@ func get_input() -> void:
 	var jump = Input.is_action_just_pressed("jump")
 	var left = Input.is_action_pressed("left")
 	var right = Input.is_action_pressed("right")
+	var down = Input.is_action_pressed("down")
+	var up = Input.is_action_pressed("jump")
 	
-	# first jump
-	if is_on_floor() and jump:
-		velocity.y = JUMP_SPEED
-		double_jump_enabled = true
-	
-	# double jump
-	if not is_on_floor() and jump and double_jump_enabled:
-		velocity.y = JUMP_SPEED
-		double_jump_enabled = false
-	
-	# move left
-	if left:
-		velocity.x = -MOVE_SPEED
-	
-	# move right
-	if right:
-		velocity.x = MOVE_SPEED
+	if not flight_mode:
+		# move left
+		if left:
+			velocity.x = -MOVE_SPEED
+		
+		# move right
+		if right:
+			velocity.x = MOVE_SPEED
+		
+		# first jump
+		if is_on_floor() and jump:
+			velocity.y = JUMP_SPEED
+			double_jump_enabled = true
+		
+		# double jump
+		if not is_on_floor() and jump and double_jump_enabled:
+			velocity.y = JUMP_SPEED
+			double_jump_enabled = false
+	else:
+		velocity.y = 0
+		# fly left
+		if left:
+			velocity.x = -FLY_SPEED
+		
+		# fly right
+		if right:
+			velocity.x = FLY_SPEED
+		
+		# fly up
+		if up:
+			velocity.y = -FLY_SPEED
+		
+		# fly down
+		if down:
+			velocity.y = FLY_SPEED
+
 
 # overloaded function that processes physics interactions every frame
 func _physics_process(delta) -> void:
-	velocity.y += GRAVITY * delta
+	if not flight_mode:
+		velocity.y += GRAVITY * delta
 	get_input()
 	move_and_slide()
 	var collision_count = get_slide_collision_count()
@@ -56,12 +80,21 @@ func _physics_process(delta) -> void:
 				var collider = collision.get_collider()
 				# check for left and right world boundaries
 				if collider.name == "LeftWall" or collider.name == "RightWall":
-					print("x movement intercepted: ", collider.name)
+					print("x movement intercepted:", collider.name)
 					velocity.x = 0
+				# check for top and bottom world boundaries
+				elif flight_mode and (collider.name == "Floor" or collider.name == "Ceiling"):
+					print("y movement intercepted:", collider.name)
+					velocity.y = 0
+				# check for powerup
+				elif not flight_mode and collider.name == "Powerup":
+					print("retrieved powerup!")
+					collider.queue_free()
+					on_powerup()
 				# check for damaging collisions
-				elif collider.name != "Floor" and not is_invincible:
+				elif collider.name != "Floor" and collider.name != "Powerup" and not is_invincible:
 					print("I collided with ", collision.get_collider().name)
-					collider.hide()
+					#collider.hide()
 					collider.queue_free()
 					
 					on_hit()
@@ -91,3 +124,14 @@ func reset() -> void:
 	is_invincible = false
 	# enable collision with obstacles
 	set_collision_mask_value(3, true)
+
+# what happens when character collides with powerup
+func on_powerup():
+	# enable flight mode
+	flight_mode = true
+	print("FLYING ENABLED")
+	
+	await get_tree().create_timer(8).timeout
+	# disable flight mode
+	flight_mode = false
+	print("FLYING DISABLED")
