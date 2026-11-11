@@ -78,48 +78,48 @@ func _physics_process(delta) -> void:
 			var collision = get_slide_collision(i)
 			if collision:
 				var collider = collision.get_collider()
+				var is_boundary = false
+				
+				# zero out movement when colliding with world boundaries
 				# check for left and right world boundaries
 				if collider.name == "LeftWall" or collider.name == "RightWall":
-					print("x movement intercepted:", collider.name)
+					#print("x movement intercepted:", collider.name)
 					velocity.x = 0
+					is_boundary = true
 				# check for top and bottom world boundaries
-				elif flight_mode and (collider.name == "Floor" or collider.name == "Ceiling"):
-					print("y movement intercepted:", collider.name)
+				elif collider.name == "Floor" or collider.name == "Ceiling":
+					#print("y movement intercepted:", collider.name)
 					velocity.y = 0
+					is_boundary = true
+				
 				# check for powerup
-				elif not flight_mode and collider.name == "Powerup":
+				if collider.name == "Powerup":
 					print("retrieved powerup!")
 					collider.queue_free()
 					on_powerup()
 				# check for damaging collisions
-				elif collider.name != "Floor" and collider.name != "Powerup" and not is_invincible:
+				elif not is_invincible and not is_boundary:
 					print("I collided with ", collision.get_collider().name)
-					#collider.hide()
 					collider.queue_free()
-					
 					on_hit()
-					await get_tree().create_timer(5).timeout
-					reset()
 
 # what happens when character collides with obstacle
 func on_hit():
 	# start hit animation
 	$AnimatedSprite2D.animation = "hit"
 	$AnimatedSprite2D.play()
-	
 	# emit hit signal
 	hit.emit()
-	 
 	# enable invincibility
 	is_invincible = true
 	# disable collision with obstacles
 	set_collision_mask_value(3, false)
-
-# what happens when the character can be hit again
-func reset() -> void:
+	
+	# invincibility frames
+	await get_tree().create_timer(5).timeout
+	
 	# stop hit animation
 	$AnimatedSprite2D.stop()
-	
 	# disable invincibility
 	is_invincible = false
 	# enable collision with obstacles
